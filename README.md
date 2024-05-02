@@ -23,17 +23,31 @@ Not to mention the documentation and videos tutorials. Check my **ComfyUI Advanc
 
 The only way to keep the code open and free is by sponsoring its development. The more sponsorships the more time I can dedicate to my open source projects.
 
-Please consider a [Github Sponsorship](https://github.com/sponsors/cubiq) or [PayPal donation](https://paypal.me/matt3o) (Matteo "matt3o" Spinelli). For sponsorships of $50+, let me know if you'd like to be mentioned in this readme file, you can find me on [Discord](https://latent.vision/discord) or _matt3o:snail:gmail.com_.
+Please consider a [Github Sponsorship](https://github.com/sponsors/cubiq) or [PayPal donation](https://paypal.me/matt3o) (Matteo "matt3o" Spinelli). For sponsorships of $50+, let me know if you'd like to be mentioned in this readme file, you can find me on [Discord](https://latent.vision/discord) or _matt3o :snail: gmail.com_.
 
 ## Important updates
+
+**2024/05/02**: Add `encode_batch_size` to the Advanced batch node. This can be useful for animations with a lot of frames to reduce the VRAM usage during the image encoding. Please note that results will be slightly different based on the batch size.
+
+**2024/04/27**: Refactored the IPAdapterWeights mostly useful for AnimateDiff animations.
+
+**2024/04/21**: Added Regional Conditioning nodes to simplify attention masking and masked text conditioning.
+
+**2024/04/16**: Added support for the new SDXL portrait unnorm model (link below). It's very strong and tends to ignore the text conditioning. Lower the CFG to 3-4 or use a RescaleCFG node.
+
+**2024/04/12**: Added scheduled weights. Useful for animations.
+
+**2024/04/09**: Added experimental Style/Composition transfer for SD1.5. The results are often not as good as SDXL. Optimal weight seems to be from 0.8 to 2.0. The **Style+Composition node doesn't work for SD1.5** at the moment, you can only alter either the Style or the Composition, I need more time for testing. Old workflows will still work **but you may need to refresh the page and re-select the weight type!**
+
+**2024/04/04**: Added Style & Composition node. It's now possible to apply both Style and Composition from the same node
 
 **2024/04/01**: Added Composition only transfer weight type for SDXL
 
 **2024/03/27**: Added Style transfer weight type for SDXL
 
-**2024/03/23**: Complete code rewrite!. **This is a breaking update!** Your previous workflows won't work and you'll need to recreate them. You've been warned! After the update, refresh your browser, delete the old IPAdapter nodes and create the new ones.
+**2024/03/23**: Complete code rewrite! **This is a breaking update!** Your previous workflows won't work and you'll need to recreate them. You've been warned! After the update, refresh your browser, delete the old IPAdapter nodes and create the new ones.
 
-*(I removed all previous updates because they were about the previous version of the extension)*
+*(I removed old updates related to the previous version of the extension)*
 
 ## Example workflows
 
@@ -47,11 +61,12 @@ The [examples directory](./examples/) has many workflows that cover all IPAdapte
  <img src="https://img.youtube.com/vi/_JzDcgKgghY/hqdefault.jpg" alt="Watch the video" />
 </a>
 
-**:star: [New IPAdapter features](https://youtu.be/_JzDcgKgghY)**
+- **:star: [New IPAdapter features](https://youtu.be/_JzDcgKgghY)**
+- **:art: [IPAdapter Style and Composition](https://www.youtube.com/watch?v=czcgJnoDVd4)**
 
 The following videos are about the previous version of IPAdapter, but they still contain valuable information.
 
-**:nerd_face: [Basic usage video](https://youtu.be/7m9ZZFU3HWo)**, **:rocket: [Advanced features video](https://www.youtube.com/watch?v=mJQ62ly7jrg)**, **:japanese_goblin: [Attention Masking video](https://www.youtube.com/watch?v=vqG1VXKteQg)**, **:movie_camera: [Animation Features video](https://www.youtube.com/watch?v=ddYbhv3WgWw)**
+:nerd_face: [Basic usage video](https://youtu.be/7m9ZZFU3HWo), :rocket: [Advanced features video](https://www.youtube.com/watch?v=mJQ62ly7jrg), :japanese_goblin: [Attention Masking video](https://www.youtube.com/watch?v=vqG1VXKteQg), :movie_camera: [Animation Features video](https://www.youtube.com/watch?v=ddYbhv3WgWw)
 
 ## Installation
 
@@ -79,7 +94,7 @@ Remember you can also use any custom location setting an `ipadapter` entry in th
 
 **FaceID** models require `insightface`, you need to install it in your ComfyUI environment. Check [this issue](https://github.com/cubiq/ComfyUI_IPAdapter_plus/issues/162) for help. Remember that most FaceID models also need a LoRA.
 
-For the Unified Loader to work the files need to be named exactly as shown in the table below.
+For the Unified Loader to work the files need to be named exactly as shown in the list below.
 
 - `/ComfyUI/models/ipadapter`
     - [ip-adapter-faceid_sd15.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid_sd15.bin), base FaceID model
@@ -88,8 +103,9 @@ For the Unified Loader to work the files need to be named exactly as shown in th
     - [ip-adapter-faceid_sdxl.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid_sdxl.bin), SDXL base FaceID
     - [ip-adapter-faceid-plusv2_sdxl.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl.bin), SDXL plus v2
     - [ip-adapter-faceid-portrait_sdxl.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-portrait_sdxl.bin), SDXL text prompt style transfer
+    - [ip-adapter-faceid-portrait_sdxl_unnorm.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-portrait_sdxl_unnorm.bin), very strong style transfer SDXL only
     - **Deprecated** [ip-adapter-faceid-plus_sd15.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plus_sd15.bin), FaceID plus v1 
-    - **Deprecated** [ip-adapter-faceid-portrait_sd15.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-portrait-v11_sd15.bin), v1 of the portrait model
+    - **Deprecated** [ip-adapter-faceid-portrait_sd15.bin](https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-portrait_sd15.bin), v1 of the portrait model
 
 Most FaceID models require a LoRA. If you use the `IPAdapter Unified Loader FaceID` it will be loaded automatically if you follow the naming convention. Otherwise you have to load them manually, be careful each FaceID model has to be paired with its own specific LoRA.
 
@@ -130,22 +146,36 @@ Please check the [troubleshooting](https://github.com/cubiq/ComfyUI_IPAdapter_pl
 
 It's only thanks to generous sponsors that **the whole community** can enjoy open and free software. Please join me in thanking the following companies and individuals!
 
-### Gold sponsors
+### :trophy: Gold sponsors
 
-[![Kaiber.ai](https://f.latent.vision/imgs/kaiber.png)](https://kaiber.ai/)
+[![Kaiber.ai](https://f.latent.vision/imgs/kaiber.png)](https://kaiber.ai/)&nbsp; &nbsp;[![Kaiber.ai](https://f.latent.vision/imgs/replicate.png)](https://replicate.com/)
+
+### :tada: Silver sponsors
+
+[![OperArt.ai](https://f.latent.vision/imgs/openart.png?r=1)](https://openart.ai/workflows)
+
+### Companies supporting my projects
+
+- [RunComfy](https://www.runcomfy.com/) (ComfyUI Cloud)
 
 ### Esteemed individuals
 
+- [Jack Gane](https://github.com/ganeJackS)
 - [Nathan Shipley](https://www.nathanshipley.com/)
+- [Dkdnzia](https://github.com/Dkdnzia)
 
-### One-time Extraordinaire
+### One-time Extraordinaires
 
 - [Eric Rollei](https://github.com/EricRollei)
+- [francaleu](https://github.com/francaleu)
 - [Neta.art](https://github.com/talesofai)
 - [Samwise Wang](https://github.com/tzwm)
+- _And all private sponsors, you know who you are!_
 
 ## Credits
 
 - [IPAdapter](https://github.com/tencent-ailab/IP-Adapter/)
+- [InstantStyle](https://github.com/InstantStyle/InstantStyle)
+- [B-Lora](https://github.com/yardenfren1996/B-LoRA/)
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
-- [laksjdjf](https://github.com/laksjdjf/IPAdapter-ComfyUI/)
+- [laksjdjf](https://github.com/laksjdjf/)
